@@ -1,8 +1,8 @@
 # coding=utf-8
-from py2neo.ogm import GraphObject, Property
+from py2neo.ogm import GraphObject, Property, RelatedFrom, RelatedTo
 
 
-class Hero(GraphObject):
+class hero(GraphObject):
     ename = Property()  #
     cname = Property()  #
     title = Property()  #
@@ -11,14 +11,15 @@ class Hero(GraphObject):
     attack_effect = Property()  #
     skill_effect = Property()  #
     pickup_easy = Property()  #
-    hero_skill = Property()
-    summoner_skill = Property()
-    best_partner = Property()
-    suppress_hero = Property()
-    defeated_hero = Property()
-    hero_recommend_items = Property()
-    hero_ming = Property()
-    hero_ming_tips = Property()
+
+    has_skill = RelatedTo("skill", "has_skill")
+    has_summoner = RelatedTo("summoner", "has_summoner")
+    best_partner = RelatedTo("hero", "best_partner")
+    suppress_hero = RelatedTo("hero", "suppress_hero")
+    defeated_hero = RelatedTo("hero", "defeated_hero")
+    recommend_item_set = RelatedTo("item_set", "recommend_item_set")
+    has_ming = RelatedTo("ming", "has_ming")
+
     hero_story = Property()  #
     hero_history = Property()  #
     max_lift = Property()  # 最大生命
@@ -43,7 +44,8 @@ class Hero(GraphObject):
     lift_refresh = Property()  # 生命回复
     magic_refresh = Property()  # 法力回复
 
-class HeroSkill(GraphObject):
+
+class skill(GraphObject):
     skill_name = Property()
     is_primary_upgrade = Property()
     is_secondary_upgrade = Property()
@@ -51,3 +53,36 @@ class HeroSkill(GraphObject):
     skill_cool_down = Property()
     skill_desc = Property()
     skill_tip = Property()
+
+
+class summoner(GraphObject):
+    summoner_rank = Property()
+    summoner_name = Property()
+    summoner_id = Property()
+    summoner_description = Property()
+
+
+class item(GraphObject):
+    total_price = Property()
+    item_name = Property()
+    item_desc2 = Property()
+    item_desc1 = Property()
+    item_type = Property()
+    item_id = Property()
+    price = Property()
+    recommended_item_set = RelatedFrom('item_set', 'recommend_item')
+
+
+class ming(GraphObject):
+    ming_id = Property()
+    ming_type = Property()
+    ming_grade = Property()
+    ming_name = Property()
+    ming_des = Property()
+    owned_hero = RelatedFrom("hero", "has_ming")
+
+
+class item_set(GraphObject):
+    tips = Property()
+    recommend_item = RelatedTo("item", "recommend_item")
+    recommended_hero = RelatedFrom("hero", "recommend_item_set")
